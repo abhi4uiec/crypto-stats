@@ -1,0 +1,37 @@
+server:
+  port: 9090
+
+spring:
+  profiles:
+    active: prod
+  cloud:
+    config:
+      profile: default
+      name: supported-currency
+  config:
+    import: optional:configserver:http://localhost:8888
+  cache:
+    cache-names:
+      - rate-limit-buckets
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=3600s
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    operationsSorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
+currency:
+  file:
+    suffix: _values.csv
+    directory: /prices
+
+# Use below if don't want to use config from spring cloud config server
+supported: BTC,ETH,DOGE,LTC,XRP

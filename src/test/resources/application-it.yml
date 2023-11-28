@@ -1,0 +1,11 @@
+supported: BTC,ETH,DOGE,LTC,XRP
+
+spring:
+  cache:
+    cache-names:
+      - bucket
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=120s
+
+bucket4j:
+  enabled: false

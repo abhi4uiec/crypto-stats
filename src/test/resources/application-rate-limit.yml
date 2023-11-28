@@ -1,0 +1,21 @@
+supported: BTC,ETH,DOGE,LTC,XRP,ETH1,ETH2
+
+spring:
+  cache:
+    cache-names:
+      - bucket-limit
+    caffeine:
+      spec: maximumSize=100000,expireAfterAccess=120s
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: bucket-limit
+      url: /api/.*
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"You have exhausted your API Request Quota\" }"
+      rate-limits:
+        - cache-key: getRemoteAddr()
+          bandwidths:
+            - capacity: 4
+              time: 2
+              unit: minutes

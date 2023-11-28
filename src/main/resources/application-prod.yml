@@ -1,0 +1,24 @@
+# LOGGING
+logging:
+  level:
+    com:
+      test:
+        crypto: debug
+
+bucket4j:
+  enabled: true
+  filters:
+    # the name of the cache key
+    - cache-name: rate-limit-buckets
+      # a regular expression
+      url: /api/.*
+      # the json response which should be added to the body
+      http-response-body: "{ \"status\": 429, \"error\": \"Too Many Requests\", \"message\": \"You have exhausted your API Request Quota\" }"
+      rate-limits:
+        - cache-key: getRemoteAddr()
+          bandwidths:
+            #rate limit
+            - capacity: 100
+              #rate per minute
+              time: 30
+              unit: minutes
